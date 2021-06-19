@@ -24,12 +24,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private GoogleApiClient googleApiClient;
     private static final int SIGN_IN = 1;
 
-    private SharedPreferences prefs;
+    SharedPreferences sharedPreferences;
+    private static String SP_NAME = "myPref";
+    private static String KEY_NAME = "name";
+    private static String KEY_EMAIL = "email";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+//        sharedPreferences = getSharedPreferences(SP_NAME, MODE_PRIVATE);
+//        String email = "";
+//        try {
+//            email = savedInstanceState.getString(KEY_EMAIL, null);
+//
+//        } catch (Exception e) {
+//
+//        }
+//
+//        if (null != email) {
+//            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+//            startActivity(intent);
+//        }
+
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
@@ -65,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             gotoProfile(result);
-            //  prefs.edit().putBoolean("Islogin", true).commit();
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putString(KEY_EMAIL, result.getSignInAccount().getEmail());
+//            editor.apply();
+
         } else {
             Toast.makeText(getApplicationContext(), "Sign in cancel", Toast.LENGTH_LONG).show();
         }
@@ -73,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private void gotoProfile(GoogleSignInResult res) {
         Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-        intent.putExtra("uuid",res.getSignInAccount().getId());
+        intent.putExtra("uuid", res.getSignInAccount().getId());
         startActivity(intent);
     }
 

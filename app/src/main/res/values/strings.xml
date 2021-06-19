@@ -2,4 +2,7 @@
     <string name="app_name">NoteApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dummyShotText">Lorem Ipsum is simply dummy text of the printing.</string>
+    <string name="dummyHeading">Create Free Notes using your Google Account!</string>
+    <string name="please_enter_note_desc">Please Enter Note Desc</string>
 </resources>

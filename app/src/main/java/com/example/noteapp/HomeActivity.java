@@ -16,6 +16,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if(extras != null){
@@ -31,6 +32,12 @@ public class HomeActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
+    }
+
+    @Override
+    public void onBackPressed()
+    {
 
     }
 

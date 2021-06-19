@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.UpdateNoteFragment">
+
+    <EditText
+        android:id="@+id/noteTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="16dp"
+
+        android:layout_marginRight="16dp"
+        android:ems="10"
+        android:fontFamily="@font/nunito_sans"
+        android:hint="Please Enter Note Title"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <EditText
+        android:id="@+id/noteDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:hint="@string/please_enter_note_desc"
+
+        android:fontFamily="@font/nunito_sans"
+        app:layout_constraintEnd_toEndOf="@+id/noteTitle"
+        app:layout_constraintStart_toStartOf="@+id/noteTitle"
+        app:layout_constraintTop_toBottomOf="@+id/noteTitle" />
+
+
+    <Button
+        android:id="@+id/updateNoteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="Update Note"
+        android:textColorHint="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/button_background"
+        app:layout_constraintEnd_toEndOf="@+id/noteDesc"
+        app:layout_constraintStart_toStartOf="@+id/noteDesc"
+        app:layout_constraintTop_toBottomOf="@+id/noteDesc" />
+
+    <Button
+        android:id="@+id/cancelNoteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background"
+        android:hint="Cancel"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorWhite"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="@+id/updateNoteButton"
+        app:layout_constraintStart_toStartOf="@+id/updateNoteButton"
+        app:layout_constraintTop_toBottomOf="@+id/updateNoteButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_sans_bold"
+        android:text="&#169; ISN"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/updateNoteButton"
+        app:layout_constraintStart_toStartOf="@+id/updateNoteButton"
+        app:layout_constraintTop_toBottomOf="@+id/updateNoteButton"
+        app:layout_constraintVertical_bias="0.95" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/nunito_sans_bold"
+        android:padding="10dp"
+        android:text="Enter Details to update note"
+        android:textAllCaps="true"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/noteTitle"
+        app:layout_constraintHorizontal_bias="0.605"
+        app:layout_constraintStart_toStartOf="@+id/noteTitle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

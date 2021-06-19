@@ -52,7 +52,7 @@ public class dao extends SQLiteOpenHelper {
 
     public List<NoteModel> getAllNotes(String userId) {
         List<NoteModel> res = new ArrayList<>();
-        String queryString = "SELECT * FROM " + NOTE_TABLE + " WHERE " + USER_ID + " = " + "'"+ userId + "'";
+        String queryString = "SELECT * FROM " + NOTE_TABLE + " WHERE " + USER_ID + " = " + "'" + userId + "'";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
         if (cursor.moveToFirst()) {
@@ -74,16 +74,29 @@ public class dao extends SQLiteOpenHelper {
         return res;
     }
 
-    public Boolean deleteNote(int noteId){
+    public Boolean deleteNote(int noteId) {
         SQLiteDatabase db = this.getWritableDatabase();
         String queryString = "DELETE FROM " + NOTE_TABLE + " WHERE " + ID + " = " + noteId;
         Cursor cursor = db.rawQuery(queryString, null);
 
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             return true;
-        }else{
+        } else {
             return false;
         }
+    }
 
+    public Boolean updateNote(NoteModel noteModel) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(NOTE_TITLE, noteModel.getNoteTitle());
+        cv.put(NOTE_DESC, noteModel.getNoteDesc());
+        int update = db.update(NOTE_TABLE, cv, "ID = " + noteModel.getId(), null);
+        if (update == -1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

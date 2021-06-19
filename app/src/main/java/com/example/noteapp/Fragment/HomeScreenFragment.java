@@ -42,6 +42,7 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
 
 
     Button logoutBtn;
+    SharedPreferences sharedPreferences;
     TextView userName, userEmail, userId;
     ImageView profileImage;
     RecyclerView noteRecyclerView;
@@ -51,6 +52,9 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
     EditText noteTitle;
     EditText noteDes;
     Button addNoteBtn;
+    String myValue;
+    RecyclerView itemRecyclerView;
+    NoteViewAdapter adapterforItem;
     private String userIdValue;
 
     private List<NoteModel> res;
@@ -70,7 +74,22 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
         View v = inflater.inflate(R.layout.fragment_home_screen, container, false);
 
         Bundle bundle = this.getArguments();
-        String myValue = bundle.getString("uuid");
+
+        try{
+         myValue = bundle.getString("uuid");
+         String update = bundle.getString("updated");
+         if(update.equals("updated")){
+             myValue = bundle.getString("USER_ID");
+             dao db = new dao(getActivity());
+             res = db.getAllNotes(myValue);
+             adapterforItem = new NoteViewAdapter(res, getContext());
+             itemRecyclerView = v.findViewById(R.id.note_recyclerView);
+             itemRecyclerView.setAdapter(adapterforItem);
+             adapterforItem.notifyDataSetChanged();
+         }
+       }catch (Exception e){
+
+       }
 
         logoutBtn = (Button) v.findViewById(R.id.logoutBtn);
         userName = (TextView) v.findViewById(R.id.name);
@@ -85,18 +104,8 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
         LinearLayoutManager layoutManagerForItems = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         RecyclerView itemRecyclerView = v.findViewById(R.id.note_recyclerView);
         itemRecyclerView.setLayoutManager(layoutManagerForItems);
-        NoteViewAdapter adapterforItem = new NoteViewAdapter(res, getContext());
+        adapterforItem = new NoteViewAdapter(res, getContext());
         itemRecyclerView.setAdapter(adapterforItem);
-
-
-        noteRecyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Test", Toast.LENGTH_LONG).show();
-
-            }
-        });
-
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -115,8 +124,10 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
                             @Override
                             public void onResult(Status status) {
                                 if (status.isSuccess()) {
+//                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                                    editor.clear();
+//                                    editor.commit();
                                     gotoMainActivity();
-                                    // prefs.edit().putBoolean("Islogin", false).commit();
                                 } else {
                                     Toast.makeText(getContext(), "Session not close", Toast.LENGTH_LONG).show();
                                 }
@@ -134,16 +145,28 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
             @Override
             public void onClick(View view) {
                 NoteModel noteModel;
+
+                // validation Checks
+                if(noteTitle.getText().toString().isEmpty() || noteDes.getText().toString().isEmpty()){
+                    Toast.makeText(getContext(),"Please Enter Details",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 try {
                     noteModel = new NoteModel(1, noteTitle.getText().toString(), noteDes.getText().toString(), userId.getText().toString());
-                    noteTitle.setText("");
                     noteDes.setText("");
+                    noteTitle.setText("");
                 } catch (Exception e) {
                     Toast.makeText(getActivity(), "Error ", Toast.LENGTH_LONG).show();
                     noteModel = new NoteModel(-1, "", "", "");
                 }
                 dao database = new dao(getActivity());
                 boolean success = database.addOne(noteModel);
+                if (success== true){
+                    Toast.makeText(view.getContext(), "Note Added!", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(view.getContext(), "Failed to Add note!", Toast.LENGTH_LONG).show();
+                }
                 List<NoteModel> res = db.getAllNotes(userId.getText().toString());
                 NoteViewAdapter adapterforItem = new NoteViewAdapter(res, getContext());
                 itemRecyclerView.setAdapter(adapterforItem);
@@ -163,7 +186,6 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
         if (opr.isDone()) {
             GoogleSignInResult result = opr.get();
-            System.out.println("id value" + result.getSignInAccount().getId());
             userIdValue = result.getSignInAccount().getId();
             handleSignInResult(result);
         } else {
@@ -179,7 +201,7 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
-            userName.setText("Hola!! " + account.getDisplayName());
+            userName.setText("Hello, " + account.getDisplayName().split( " ")[0]);
             userEmail.setText(account.getEmail());
             userId.setText(account.getId());
             userIdValue = account.getId();
@@ -194,6 +216,25 @@ public class HomeScreenFragment extends Fragment implements GoogleApiClient.OnCo
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        googleApiClient.stopAutoManage(getActivity());
+        googleApiClient.disconnect();
+    }
+
+    public void refreshData(){
+        dao db = new dao(getActivity());
+        res = db.getAllNotes(myValue);
+        adapterforItem.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        refreshData();
+    }
     private void gotoMainActivity() {
         Intent intent = new Intent(getContext(), MainActivity.class);
         startActivity(intent);
