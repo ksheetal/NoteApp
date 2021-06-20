@@ -71,8 +71,16 @@ public class UpdateNoteFragment extends Fragment {
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                noteTitle.getText().toString();
-//                noteDesc.getText().toString();
+
+                if (noteTitle.getText().toString().isEmpty() || noteTitle.getText().toString().equals("")) {
+                    Toast.makeText(view.getContext(), "Please Enter Details", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (noteDesc.getText().toString().isEmpty() || noteDesc.getText().toString().equals("")) {
+                    Toast.makeText(view.getContext(), "Please Enter Details", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 NoteModel noteModel = new NoteModel();
                 noteModel.setId(ID);
@@ -82,12 +90,12 @@ public class UpdateNoteFragment extends Fragment {
                 dao data = new dao(getActivity());
                 try {
                     data.updateNote(noteModel);
-                   // HomeScreenFragment homeScreenFragment = new HomeScreenFragment();
-                   // homeScreenFragment.refreshData();
+                    // HomeScreenFragment homeScreenFragment = new HomeScreenFragment();
+                    // homeScreenFragment.refreshData();
                     Toast.makeText(view.getContext(), "Note Updated!", Toast.LENGTH_LONG).show();
                     Bundle bundle1 = new Bundle();
-                    bundle1.putString("updated","updated");
-                    bundle1.putString("USER_ID",noteModel.getUserID());
+                    bundle1.putString("updated", "updated");
+                    bundle1.putString("USER_ID", noteModel.getUserID());
                     Fragment fragment = new HomeScreenFragment();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragment.setArguments(bundle1);
