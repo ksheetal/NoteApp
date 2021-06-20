@@ -53,7 +53,9 @@ public class UpdateNoteFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().onBackPressed();
+                Toast.makeText(view.getContext(),"Note update cancel",Toast.LENGTH_SHORT).show();
+//                getActivity().onBackPressed();
+                getActivity().getSupportFragmentManager().popBackStack();
 
             }
         });
